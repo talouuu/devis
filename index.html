@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Travel Buds Studio — Générateur de Devis 2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Mono:wght@300;400;500&display=swap');
+
+:root {
+  --ink: #1a1a1a;
+  --gold: #b8945a;
+  --gold-light: #e8d5b0;
+  --gold-pale: #fdf6ec;
+  --cream: #f8f3ec;
+  --white: #ffffff;
+  --muted: #7a7060;
+  --border: #e0d5c5;
+  --red: #b03a2e;
+  --green: #1e8449;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Mono', monospace;
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+.header {
+  background: var(--ink);
+  padding: 24px 40px 20px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  border-bottom: 3px solid var(--gold);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 300;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 1;
+}
+.header .sub {
+  font-size: 0.56rem;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-top: 5px;
+}
+.header-right {
+  text-align: right;
+  font-size: 0.54rem;
+  color: #5a5040;
+  letter-spacing: 0.07em;
+  line-height: 1.9;
+}
+.header-right strong { color: var(--gold); font-weight: 400; }
+
+.app {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  height: calc(100vh - 78px);
+}
+
+/* SIDEBAR */
+.sidebar {
+  background: var(--white);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.sidebar-inner {
+  padding: 18px 16px;
+  overflow-y: auto;
+  flex: 1;
+}
+.sidebar-label {
+  font-size: 0.52rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--gold-light);
+}
+
+.cat-select {
+  width: 100%;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.63rem;
+  padding: 9px 32px 9px 12px;
+  border: 1px solid var(--border);
+  background: var(--cream);
+  color: var(--ink);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23b8945a'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  margin-bottom: 14px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.cat-select:focus { border-color: var(--gold); }
+
+.service-card {
+  border: 1px solid var(--border);
+  background: var(--cream);
+  margin-bottom: 6px;
+  transition: all 0.14s;
+  cursor: pointer;
+}
+.service-card:hover { border-color: var(--gold); background: var(--gold-pale); }
+.sc-inner { display: flex; align-items: stretch; }
+.sc-body { flex: 1; padding: 9px 11px; }
+.sc-name { font-size: 0.62rem; color: var(--ink); line-height: 1.35; font-weight: 500; }
+.sc-sub { font-size: 0.52rem; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+.sc-palier { font-size: 0.49rem; color: var(--gold); margin-top: 3px; line-height: 1.6; }
+.sc-min { font-size: 0.49rem; color: #b0a090; margin-top: 1px; }
+.sc-price-col {
+  padding: 8px 10px;
+  display: flex; flex-direction: column; align-items: flex-end; justify-content: center;
+  min-width: 86px; border-left: 1px solid var(--border); gap: 2px;
+}
+.sc-pval { font-size: 0.68rem; color: var(--gold); font-weight: 500; }
+.sc-punit { font-size: 0.5rem; color: var(--muted); }
+.sc-addbtn {
+  display: flex; align-items: center; justify-content: center;
+  width: 26px; border: none; background: transparent;
+  border-left: 1px solid var(--border); cursor: pointer;
+  color: var(--muted); font-size: 1.1rem; transition: all 0.12s;
+}
+.service-card:hover .sc-addbtn { color: var(--gold); background: rgba(184,148,90,0.07); }
+
+/* MAIN */
+.main { display: flex; flex-direction: column; overflow: hidden; background: var(--cream); }
+.main-scroll { flex: 1; overflow-y: auto; padding: 20px 28px 0; }
+
+.rights-box {
+  background: var(--white);
+  border-left: 3px solid var(--gold);
+  border: 1px solid var(--gold-light);
+  border-left: 3px solid var(--gold);
+  padding: 9px 14px;
+  margin-bottom: 16px;
+  font-size: 0.54rem;
+  color: var(--muted);
+  line-height: 2;
+  display: flex; gap: 20px; flex-wrap: wrap;
+}
+.rights-box strong { color: var(--ink); font-weight: 500; }
+
+.empty-state {
+  text-align: center; padding: 70px 30px; color: var(--muted);
+}
+.empty-icon { font-size: 2rem; margin-bottom: 14px; opacity: 0.22; }
+.empty-state p { font-size: 0.6rem; letter-spacing: 0.08em; line-height: 2.3; }
+
+/* TABLE */
+.quote-table { width: 100%; border-collapse: collapse; }
+.quote-table thead th {
+  font-size: 0.5rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--muted); padding: 6px 8px; text-align: left;
+  border-bottom: 2px solid var(--gold-light); background: var(--cream);
+  white-space: nowrap;
+}
+.quote-table thead th.r { text-align: right; }
+
+.tr-sep td {
+  font-size: 0.5rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--gold); font-weight: 500;
+  padding: 8px 8px 4px; background: var(--gold-pale);
+  border-top: 1px solid var(--gold-light); border-bottom: 1px solid var(--gold-light);
+}
+
+.tr-data td {
+  padding: 10px 8px; border-bottom: 1px solid var(--border);
+  background: var(--white); vertical-align: top; font-size: 0.6rem;
+}
+.tr-data:hover td { background: #fefcf8; }
+.tr-data.alt td { background: #fdf9f4; }
+
+.desc-name { font-weight: 500; color: var(--ink); margin-bottom: 4px; font-size: 0.61rem; }
+.desc-full {
+  font-size: 0.52rem; color: var(--muted); line-height: 1.75;
+  margin-bottom: 6px; white-space: pre-wrap;
+}
+.copy-row { display: flex; gap: 4px; flex-wrap: wrap; }
+.cbtn {
+  font-family: 'DM Mono', monospace; font-size: 0.47rem; letter-spacing: 0.07em;
+  padding: 2px 7px; border: 1px solid var(--border); background: transparent;
+  cursor: pointer; color: var(--muted); transition: all 0.12s; white-space: nowrap;
+}
+.cbtn:hover { border-color: var(--gold); color: var(--gold); }
+.cbtn.ok { border-color: var(--green); color: var(--green); }
+
+.qty-wrap { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+.qbtn {
+  width: 20px; height: 20px; border: 1px solid var(--border); background: transparent;
+  cursor: pointer; font-size: 0.85rem; color: var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.1s; flex-shrink: 0; line-height: 1; padding: 0;
+}
+.qbtn:hover { border-color: var(--gold); color: var(--gold); }
+.qinput {
+  width: 50px; text-align: center; border: 1px solid var(--border);
+  background: var(--cream); font-family: 'DM Mono', monospace;
+  font-size: 0.61rem; padding: 3px 4px; color: var(--ink);
+  -moz-appearance: textfield;
+}
+.qinput::-webkit-inner-spin-button, .qinput::-webkit-outer-spin-button { -webkit-appearance: none; }
+.qinput:focus { outline: none; border-color: var(--gold); }
+.qty-label { font-size: 0.5rem; color: var(--gold); margin-top: 3px; }
+
+.r-cell { text-align: right; }
+.price-cell { text-align: right; font-size: 0.6rem; color: var(--muted); white-space: nowrap; vertical-align: middle !important; }
+.total-cell { text-align: right; font-size: 0.65rem; font-weight: 500; color: var(--ink); white-space: nowrap; vertical-align: middle !important; }
+
+.note-ta {
+  width: 100%; border: 1px solid transparent; background: transparent;
+  font-family: 'DM Mono', monospace; font-size: 0.53rem; color: var(--muted);
+  resize: none; min-height: 22px; outline: none; padding: 2px; line-height: 1.6;
+  transition: border-color 0.1s;
+}
+.note-ta:hover, .note-ta:focus { border-color: var(--border); background: var(--cream); }
+.note-ta::placeholder { color: #ccc; font-style: italic; }
+
+.del-btn {
+  background: transparent; border: none; cursor: pointer;
+  color: #ccc; font-size: 0.85rem; padding: 2px; transition: color 0.12s; line-height: 1;
+}
+.del-btn:hover { color: var(--red); }
+
+.tr-subtotal td {
+  background: var(--ink) !important; color: var(--gold) !important;
+  padding: 12px 8px; border: none; vertical-align: middle;
+}
+.sub-label { font-size: 0.5rem; letter-spacing: 0.18em; text-transform: uppercase; color: #555 !important; }
+.sub-val { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; }
+
+/* FOOTER */
+.footer {
+  background: var(--ink); border-top: 2px solid var(--gold);
+  padding: 13px 28px; display: flex; align-items: center;
+  justify-content: space-between; flex-shrink: 0;
+}
+.footer.hidden { display: none; }
+.footer-amounts { display: flex; align-items: baseline; gap: 28px; }
+.fa-item label { font-size: 0.48rem; letter-spacing: 0.2em; text-transform: uppercase; color: #555; display: block; margin-bottom: 2px; }
+.fa-item .fval { font-size: 0.85rem; color: #ccc; }
+.fa-item.main-total .fval { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--gold); }
+.footer-actions { display: flex; gap: 8px; }
+.fbtn {
+  font-family: 'DM Mono', monospace; font-size: 0.57rem; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 8px 15px; cursor: pointer; transition: all 0.13s; border: none;
+}
+.fbtn.sec { background: transparent; border: 1px solid #444; color: #888; }
+.fbtn.sec:hover { border-color: var(--gold); color: var(--gold); }
+.fbtn.pri { background: var(--gold); color: var(--ink); font-weight: 500; }
+.fbtn.pri:hover { background: #c9a264; }
+
+/* SESSION HEADERS */
+.sess-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--ink);
+  border-left: 4px solid var(--gold);
+}
+.sess-title-area {
+  display: flex; align-items: center; gap: 16px; flex: 1;
+}
+.sess-name-input {
+  font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.06em;
+  background: transparent; border: none; border-bottom: 1px solid #444;
+  color: #fff; padding: 2px 4px; width: 160px; outline: none;
+  transition: border-color 0.14s;
+}
+.sess-name-input:focus { border-bottom-color: var(--gold); }
+.sess-name-input::placeholder { color: #555; font-style: italic; }
+
+.sess-day-block {
+  display: flex; align-items: center; gap: 8px;
+}
+.day-btn {
+  width: 24px; height: 24px; border: 1px solid #555; background: transparent;
+  color: var(--gold); cursor: pointer; font-size: 1rem; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.12s; flex-shrink: 0; padding: 0;
+}
+.day-btn:hover { border-color: var(--gold); background: rgba(184,148,90,0.12); }
+.day-display { text-align: center; min-width: 90px; }
+.day-count {
+  font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: #fff;
+  display: block; line-height: 1.1;
+}
+.day-min { font-size: 0.48rem; color: var(--gold); letter-spacing: 0.12em; text-transform: uppercase; display: block; margin-top: 1px; }
+
+.sess-actions { display: flex; align-items: center; gap: 8px; margin-left: 12px; }
+.sess-del-btn {
+  background: transparent; border: 1px solid #444; color: #666;
+  cursor: pointer; font-size: 0.7rem; padding: 4px 7px; transition: all 0.12s; line-height: 1;
+}
+.sess-del-btn:hover { border-color: var(--red); color: var(--red); }
+.sess-empty {
+  font-size: 0.56rem; color: #aaa; letter-spacing: 0.08em; font-style: italic;
+  padding: 14px 14px; background: var(--white); border-bottom: 1px solid var(--border);
+}
+.sess-gap { height: 20px; }
+
+/* ADD SESSION */
+.add-session-row {
+  padding: 12px 0 4px;
+  display: flex;
+}
+.add-sess-btn {
+  font-family: 'DM Mono', monospace; font-size: 0.57rem; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 8px 18px;
+  border: 1px dashed var(--border); background: transparent;
+  color: var(--muted); cursor: pointer; transition: all 0.14s;
+}
+.add-sess-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+/* SESSION SUBTOTAL ROW */
+.tr-sess-total td {
+  background: #f0eae0 !important;
+  padding: 8px 8px; border-top: 2px solid var(--gold-light);
+  border-bottom: 2px solid var(--gold-light); font-size: 0.62rem;
+  vertical-align: middle;
+}
+.sess-total-label { font-size: 0.52rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+
+/* GRAND TOTAL */
+.grand-total-row {
+  display: flex; align-items: center; justify-content: flex-end;
+  padding: 16px 12px;
+  background: var(--ink); border-top: 3px solid var(--gold);
+  margin-top: 4px;
+}
+.gt-label { font-size: 0.54rem; letter-spacing: 0.2em; text-transform: uppercase; color: #666; margin-right: 14px; }
+.gt-val { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--gold); }
+
+.ref-badge {
+  display: inline-block; font-size: 0.46rem; letter-spacing: 0.1em;
+  padding: 1px 5px; background: var(--ink); color: var(--gold);
+  border: 1px solid var(--gold); vertical-align: middle; margin-right: 4px;
+  font-family: 'DM Mono', monospace;
+}
+.sc-ref-group {
+  font-size: 0.5rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--gold); padding: 10px 2px 4px;
+  border-bottom: 1px solid var(--gold-light); margin-bottom: 5px; margin-top: 2px;
+}
+
+.sc-quick {
+  display: flex; flex-wrap: wrap; gap: 3px; margin-top: 6px;
+}
+.sc-qbtn {
+  font-family: 'DM Mono', monospace; font-size: 0.48rem; letter-spacing: 0.06em;
+  padding: 2px 7px; border: 1px solid var(--border); background: var(--white);
+  cursor: pointer; color: var(--muted); transition: all 0.12s;
+}
+.sc-qbtn:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-pale); }
+
+.tag {
+  display: inline-block; font-size: 0.44rem; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 1px 5px; border: 1px solid currentColor; margin-left: 5px; vertical-align: middle; opacity: 0.75;
+}
+.tag-hp { color: #b03a2e; }
+.tag-studio { color: #1a5276; }
+.tag-video { color: #1e8449; }
+.tag-forfait { color: #6c3483; }
+
+/* ============================================================
+   MOBILE — iPhone responsive
+   ============================================================ */
+.mob-tabs { display: none; }
+
+@media (max-width: 700px) {
+  html, body { overflow: hidden; }
+
+  .header { padding: 10px 14px; flex-wrap: wrap; gap: 4px; min-height: unset; }
+  .header h1 { font-size: 1.05rem; }
+  .header .sub { font-size: 0.48rem; }
+  .header-right { display: none; }
+
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: 42px 1fr;
+    height: calc(100vh - 54px);
+  }
+
+  /* Tab bar */
+  .mob-tabs {
+    display: flex !important;
+    grid-column: 1; grid-row: 1;
+    background: var(--ink); border-bottom: 2px solid var(--gold);
+    z-index: 50;
+  }
+  .mob-tab {
+    flex: 1; padding: 0 8px; text-align: center;
+    font-family: 'DM Mono', monospace; font-size: 0.58rem;
+    letter-spacing: 0.09em; text-transform: uppercase;
+    color: #555; cursor: pointer; border: none; background: transparent;
+    border-bottom: 3px solid transparent; margin-bottom: -2px;
+    -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+  }
+  .mob-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* Panel switching */
+  .sidebar {
+    grid-column: 1; grid-row: 2;
+    display: none; border-right: none;
+    height: 100%; overflow: hidden;
+  }
+  .sidebar.mob-visible { display: flex !important; }
+
+  .main {
+    grid-column: 1; grid-row: 2;
+    display: none;
+  }
+  .main.mob-visible { display: flex !important; }
+
+  /* Bigger touch targets */
+  .qbtn  { width: 34px; height: 34px; font-size: 1.1rem; }
+  .qinput { width: 48px; font-size: 0.72rem; padding: 5px 2px; }
+  .day-btn { width: 34px; height: 34px; font-size: 1.1rem; }
+  .sc-addbtn { width: 42px; font-size: 1.3rem; }
+  .del-btn { font-size: 1rem; padding: 6px 8px; }
+  .cbtn { padding: 5px 10px; font-size: 0.52rem; }
+
+  /* Main scroll area */
+  .main-scroll { padding: 10px 10px 0; }
+
+  /* Hide note + unit price columns on narrow screens */
+  .quote-table thead th:nth-child(3),
+  .quote-table thead th:nth-child(5),
+  .tr-data       td:nth-child(3),
+  .tr-data       td:nth-child(5),
+  .tr-complement td:nth-child(3),
+  .tr-complement td:nth-child(5),
+  .tr-sess-total td:nth-child(3) { display: none; }
+
+  .quote-table th:nth-child(1) { width: 52% !important; }
+  .quote-table th:nth-child(2) { width: 24% !important; }
+  .quote-table th:nth-child(4) { width: 24% !important; }
+
+  /* Session header */
+  .sess-header { flex-wrap: wrap; gap: 8px; padding: 10px; }
+  .sess-title-area { flex-wrap: wrap; gap: 8px; }
+  .sess-name-input { width: 120px; font-size: 0.58rem; }
+  .day-display { min-width: 72px; }
+  .day-count { font-size: 0.88rem; }
+
+  /* Footer */
+  .footer { padding: 9px 12px; flex-wrap: wrap; gap: 8px; }
+  .footer-amounts { gap: 12px; flex-wrap: wrap; }
+  .fa-item label { font-size: 0.43rem; }
+  .fa-item .fval { font-size: 0.72rem; }
+  .fa-item.main-total .fval { font-size: 1.1rem; }
+  .fbtn { padding: 7px 10px; font-size: 0.52rem; }
+
+  .rights-box { font-size: 0.49rem; gap: 6px; padding: 7px 10px; line-height: 1.75; }
+  .grand-total-row { padding: 12px 10px; }
+  .gt-val { font-size: 1.15rem; }
+  .sc-body { padding: 8px; }
+  .sc-name { font-size: 0.63rem; }
+  .sc-price-col { min-width: 64px; padding: 7px; }
+  .sc-pval { font-size: 0.67rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>The Travel Buds Studio</h1>
+    <div class="sub">Générateur de devis 2026 &nbsp;·&nbsp; Tous tarifs HT</div>
+  </div>
+  <div class="header-right">
+    <strong>Base incluse :</strong> Diffusion 2 ans · digital · presse · comm. interne · hors impression · hors achat d'espace<br>
+    <strong>Droits d'auteur photos :</strong> +60% sans impression &nbsp;·&nbsp; +80% avec impression &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Vidéos :</strong> +50%
+  </div>
+</div>
+
+<div class="app">
+  <!-- Mobile tab bar (hidden on desktop) -->
+  <div class="mob-tabs">
+    <button class="mob-tab active" id="tabCatalogue" onclick="mobSwitch('catalogue')">📋 Catalogue</button>
+    <button class="mob-tab" id="tabDevis" onclick="mobSwitch('devis')">🧾 Devis</button>
+  </div>
+  <div class="sidebar mob-visible" id="panelCatalogue">
+    <div class="sidebar-inner">
+      <div class="sidebar-label">Ajouter une prestation</div>
+      <select class="cat-select" id="catSelect" onchange="onCatChange()">
+        <option value="">— Choisir une catégorie —</option>
+        <option value="restaurant">📷 Shooting Restaurant</option>
+        <option value="packshot">📦 Packshots</option>
+        <option value="studio">🏛 Photos Studio</option>
+        <option value="video">🎬 Vidéos Culinaires</option>
+        <option value="options">⚙️ Options & Droits</option>
+        <option value="forfait">✦ Forfaits Combinés</option>
+      </select>
+      <div id="serviceList"></div>
+    </div>
+  </div>
+
+  <div class="main" id="panelDevis">
+    <div class="main-scroll" id="mainScroll">
+      <div class="rights-box">
+        <span><strong>Base incluse :</strong> Cession diffusion 2 ans · France · digital · presse · comm. interne · hors impression · hors achat d'espace</span>
+        <span><strong>+Droits d'auteur photos :</strong> +60% sans impression · +80% avec impression</span>
+        <span><strong>+Droits d'auteur vidéos :</strong> +50%</span>
+      </div>
+      <div id="quoteArea">
+        <div class="empty-state">
+          <div class="empty-icon">◈</div>
+          <p>Sélectionnez une catégorie dans le menu à gauche<br>pour ajouter des prestations au devis.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer hidden" id="footer">
+      <div class="footer-amounts">
+        <div class="fa-item"><label>Lignes</label><div class="fval" id="fLines">0</div></div>
+        <div class="fa-item main-total"><label>Total HT</label><div class="fval" id="fHT">0 €</div></div>
+        <div class="fa-item"><label>TVA 20%</label><div class="fval" id="fTVA">0 €</div></div>
+        <div class="fa-item"><label>Total TTC</label><div class="fval" id="fTTC">0 €</div></div>
+      </div>
+      <div class="footer-actions">
+        <button class="fbtn sec" onclick="clearAll()">Effacer tout</button>
+        <button class="fbtn pri" onclick="copyAll()">Copier le devis</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==========================================================
+// FULL DESCRIPTIONS
+// ==========================================================
+const DESC = {
+  photo_paris: (n) => `${n} photo${n>1?'s':''} · Prise de vue, cadrage, mise à disposition du matériel photographique et lumière.\nPost-production, colorimétrie, et retouche photos pour utilisation digitale (2 retours inclus) et envoi d'une planche de sélection sous 10 jours ouvrés.\nCession de droits de diffusion pour 2 ans en France, pour utilisation digitale pour presse, réseaux sociaux, et sites web, hors impression et hors achat d'espace, avec obligation de mention du nom d'auteur "The Travel Buds".`,
+
+  photo_hors: (n) => `${n} photo${n>1?'s':''} · Prise de vue, cadrage, mise à disposition du matériel photographique et lumière.\nPost-production, colorimétrie, et retouche photos pour utilisation digitale (2 retours inclus) et envoi d'une planche de sélection sous 10 jours ouvrés.\nCession de droits de diffusion pour 2 ans en France, pour utilisation digitale pour presse, réseaux sociaux, et sites web, hors impression et hors achat d'espace, avec obligation de mention du nom d'auteur "The Travel Buds".\nJournée complète uniquement · Majoration Hors Paris appliquée (trajet max. 2h30).`,
+
+  packshot_paris: (n) => `${n} packshot${n>1?'s':''} · Prise de vue sur site ou en studio, cadrage produit, mise à disposition du matériel photographique et lumière.\nPost-production, retouche et envoi en HD sous 10 jours ouvrés (2 retours inclus).\nCession de droits d'auteur pour 2 ans en France, pour utilisation digitale (presse, réseaux sociaux, sites web, communication interne), hors impression et hors achat d'espace. Aucune obligation de mention du nom d'auteur.`,
+
+  packshot_hors: (n) => `${n} packshot${n>1?'s':''} · Prise de vue sur site, cadrage produit, mise à disposition du matériel photographique et lumière.\nPost-production, retouche et envoi en HD sous 10 jours ouvrés (2 retours inclus).\nCession de droits d'auteur pour 2 ans en France, pour utilisation digitale (presse, réseaux sociaux, sites web, communication interne), hors impression et hors achat d'espace. Aucune obligation de mention du nom d'auteur.\nJournée complète uniquement · Majoration Hors Paris +20% appliquée.`,
+
+  studio_paris: (n) => `${n} photo${n>1?'s':''} studio · Mise à disposition du studio photo et du matériel photographique.\nPrise de vue, cadrage, éclairage studio, post-production, retouche et envoi en HD sous 10 jours ouvrés (2 retours inclus).\nCession de droits de diffusion pour 2 ans en France, pour utilisation digitale (presse, réseaux sociaux, sites web), hors impression et hors achat d'espace, avec obligation de mention du nom d'auteur "The Travel Buds".`,
+
+  studio_hors: (n) => `${n} photo${n>1?'s':''} studio · Mise à disposition du studio photo et du matériel photographique.\nPrise de vue, cadrage, éclairage studio, post-production, retouche et envoi en HD sous 10 jours ouvrés (2 retours inclus).\nCession de droits de diffusion pour 2 ans en France, pour utilisation digitale (presse, réseaux sociaux, sites web), hors impression et hors achat d'espace, avec obligation de mention du nom d'auteur "The Travel Buds".\nJournée complète uniquement · Majoration Hors Paris +20% appliquée.`,
+
+  location_studio: () => `Mise à disposition du Studio Palaiseau — sans équipe.\nAccès au studio entièrement équipé (fonds disponibles, éclairage sur place). Matériel photo/vidéo à la charge du locataire.`,
+
+  video_paris: (fmt) => `1 vidéo culinaire jusqu'à ${fmt} · Cadrage, étalonnage, montage et envoi en HD sous 15 jours ouvrés (2 retours inclus).\nCaptation réalisée par deux vidéastes. Livraison au format MP4 HD optimisé réseaux sociaux et web.\nCession de droits de diffusion pour 2 ans en France, pour utilisation digitale (réseaux sociaux, sites web, presse digitale), hors achat d'espace, avec obligation de mention du nom d'auteur "The Travel Buds".`,
+
+  video_hors: (fmt) => `1 vidéo culinaire jusqu'à ${fmt} · Cadrage, étalonnage, montage et envoi en HD sous 15 jours ouvrés (2 retours inclus).\nCaptation réalisée par deux vidéastes. Livraison au format MP4 HD optimisé réseaux sociaux et web.\nCession de droits de diffusion pour 2 ans en France, pour utilisation digitale (réseaux sociaux, sites web, presse digitale), hors achat d'espace, avec obligation de mention du nom d'auteur "The Travel Buds".\nJournée complète uniquement · Majoration Hors Paris +20% appliquée.`,
+
+  da_no_print: () => `Cession de droits d'auteur — sans impression, sans obligation de mention du nom d'auteur.\nSupplément +60% appliqué sur le prix de base de la prestation photo.\nUtilisation digitale uniquement — hors impression, hors achat d'espace publicitaire.`,
+
+  da_with_print: () => `Cession de droits d'auteur avec impression — sans obligation de mention du nom d'auteur.\nSupplément +80% appliqué sur le prix de base de la prestation photo.\nInclut l'utilisation en impression (PLV, packaging, affichage) — hors achat d'espace publicitaire.`,
+
+  da_video: () => `Cession de droits d'auteur vidéo — sans obligation de mention du nom d'auteur.\nSupplément +50% appliqué sur le prix de base de la prestation vidéo.\nUtilisation digitale uniquement — hors achat d'espace publicitaire.`,
+
+  retouche_imp: () => `Retouche ultra-détaillée pour impression — PLV, packaging, affichage.\nSupplément +15% par photo sur le prix de base. Livraison de fichiers haute résolution print-ready.`,
+
+  ext_1an: () => `Extension des droits de diffusion : +1 an (durée totale portée à 3 ans). Supplément +5% sur le prix de base.`,
+  ext_3ans: () => `Extension des droits de diffusion : +3 ans (durée totale portée à 5 ans). Supplément +10% sur le prix de base.`,
+  ext_8ans: () => `Extension des droits de diffusion : +8 ans (durée totale portée à 10 ans). Supplément +20% sur le prix de base.`,
+
+  forfait_7a: () => `Forfait Essentiel 7A — ½ journée Paris.\nComprend : 20 photos (prise de vue, retouche, 2 retours, envoi HD sous 10 jours) + 1 vidéo 30s (montage, étalonnage, 2 retours, envoi HD sous 15 jours).\nCession de droits de diffusion 2 ans incluse. Stylisme exclu. Économie ~10% vs prestations séparées.`,
+
+  forfait_7b: () => `Forfait Standard 7B — journée complète Paris.\nComprend : 50 photos (prise de vue, retouche, 2 retours, envoi HD sous 10 jours) + 3 vidéos 15s (montage, étalonnage, 2 retours, envoi HD sous 15 jours).\nCession de droits de diffusion 2 ans incluse. Stylisme exclu. Économie ~10% vs prestations séparées.`,
+
+  forfait_7c: () => `Forfait Premium 7C — 2 jours Paris.\nComprend : 100 photos (prise de vue, retouche, 2 retours, envoi HD sous 10 jours) + 4 vidéos (2×30s + 2×15s, montage, étalonnage, 2 retours, envoi HD sous 15 jours).\nCession de droits de diffusion 2 ans incluse. Stylisme exclu. Économie ~12% vs prestations séparées.`,
+
+  book_day: () => `Book photo — journée complète.\nPrise de vue créative, direction artistique, post-production et retouche soignée. Max. 10 photos / jour.\nStylisme et accessoires exclus. Droits et utilisation à définir au devis.`,
+
+  book_5j: () => `Book photo complet — 5 jours de tournage.\nPrise de vue créative sur l'ensemble des journées, post-production et retouche soignée.\nStylisme exclu. Droits et utilisation à définir au devis.`,
+};
+
+// ==========================================================
+// PRICING PALIERS
+// ==========================================================
+// For palier services: price computed = getPU(paliers, qty) * qty
+const P = {
+  photo_demi_paris: [{ max:10,pu:50 },{ max:20,pu:45 },{ max:30,pu:35 },{ max:40,pu:30 },{ max:Infinity,pu:30 }],
+  photo_jour_paris: [{ max:50,pu:33 },{ max:70,pu:30 },{ max:Infinity,pu:20 }],
+  photo_jour_hors:  [{ max:50,pu:35 },{ max:70,pu:31.4 },{ max:Infinity,pu:20 }],
+  pack_demi_paris:  [{ max:10,pu:90 },{ max:20,pu:81 },{ max:Infinity,pu:81 }],
+  pack_jour_paris:  [{ max:30,pu:68.3 },{ max:40,pu:54 },{ max:50,pu:49.5 },{ max:Infinity,pu:49.5 }],
+  pack_jour_hors:   [{ max:10,pu:108 },{ max:20,pu:97.2 },{ max:30,pu:82 },{ max:40,pu:64.8 },{ max:50,pu:59.4 },{ max:Infinity,pu:59.4 }],
+  studio_paris:     [{ max:Infinity,pu:150 }],
+  studio_hors:      [{ max:Infinity,pu:180 }],
+};
+
+// Returns unit price for qty.
+// Rule: if qty exactly hits a boundary → use that boundary's rate.
+// If qty is between two boundaries → use the LOWER boundary's rate.
+// e.g. paliers: max10=50€, max20=45€ → qty=11 → use 50€ (not 45€)
+//                                      qty=20 → use 45€ (exactly on boundary)
+//                                      qty=21 → use 45€ (lower completed boundary)
+function getPU(paliers, qty) {
+  for (let i = 0; i < paliers.length; i++) {
+    if (qty <= paliers[i].max) {
+      if (i === 0 || qty === paliers[i].max) return paliers[i].pu;
+      // qty is strictly between paliers[i-1].max and paliers[i].max
+      return paliers[i-1].pu;
+    }
+  }
+  return paliers[paliers.length-1].pu;
+}
+
+function palierSummary(paliers, unit) {
+  // Build a readable tariff summary from paliers
+  const shown = paliers.filter(p => p.max !== Infinity);
+  if (!shown.length) return `${paliers[0].pu} € / ${unit}`;
+  return shown.map((p,i) => {
+    const from = i === 0 ? 1 : paliers[i-1].max + 1;
+    return `${from}–${p.max} ${unit}s = ${p.pu} €/${unit}`;
+  }).join(' · ') + (paliers[paliers.length-1].max === Infinity ? ` · > ${paliers[paliers.length-2]?.max||0} : ${paliers[paliers.length-1].pu} €/${unit}` : '');
+}
+
+// ==========================================================
+// CATALOGUE — fixed rows matching reference tables exactly
+// ==========================================================
+// isFixed:true → price is fixedPrice for exactly fixedQty units (displayed as a card)
+// isPalier:true → price computed from palier table (for free-qty input in quote)
+// Each reference table row becomes one sidebar card.
+// Section references: 1A, 1B, 1C, 2A, 2B, 2C, 3A, 3B, 3C, 4A-F, 5, 6, 7A-C
+// ½j services → days:0.5 | 1j services → days:1
+
+const SERVICES = {
+  restaurant: [
+    // 1A — ½j Paris — 5 fixed rows
+    { id:'r1a_10', ref:'1A', name:'½j Paris — 10 photos restaurant', tag:null,
+      sub:'Demi-journée · Paris & Banlieue (max 1h30)', unit:'photo',
+      isFixed:true, fixedQty:10, fixedPrice:500, pu:50,
+      desc: DESC.photo_paris, days:0.5 },
+    { id:'r1a_20', ref:'1A', name:'½j Paris — 20 photos restaurant', tag:null,
+      sub:'Demi-journée · Paris & Banlieue (max 1h30)', unit:'photo',
+      isFixed:true, fixedQty:20, fixedPrice:900, pu:45,
+      desc: DESC.photo_paris, days:0.5 },
+    { id:'r1a_30', ref:'1A', name:'½j Paris — 30 photos restaurant', tag:null,
+      sub:'Demi-journée · Paris & Banlieue (max 1h30)', unit:'photo',
+      isFixed:true, fixedQty:30, fixedPrice:1050, pu:35,
+      desc: DESC.photo_paris, days:0.5 },
+    { id:'r1a_40', ref:'1A', name:'½j Paris — 40 photos restaurant', tag:null,
+      sub:'Demi-journée · Paris & Banlieue (max 1h30)', unit:'photo',
+      isFixed:true, fixedQty:40, fixedPrice:1200, pu:30,
+      desc: DESC.photo_paris, days:0.5 },
+    { id:'r1a_50', ref:'1A', name:'½j Paris — 50 photos restaurant', tag:null,
+      sub:'Demi-journée · Paris & Banlieue (max 1h30)', unit:'photo',
+      isFixed:true, fixedQty:50, fixedPrice:1500, pu:30,
+      desc: DESC.photo_paris, days:0.5 },
+    // 1B — 1j Paris — 2 fixed rows
+    { id:'r1b_50', ref:'1B', name:'1j Paris — 50 photos restaurant', tag:null,
+      sub:'Journée complète · Paris & Banlieue (max 1h30)', unit:'photo',
+      isFixed:true, fixedQty:50, fixedPrice:1650, pu:33,
+      desc: DESC.photo_paris, days:1 },
+    { id:'r1b_70', ref:'1B', name:'1j Paris — 70 photos restaurant', tag:null,
+      sub:'Journée complète · Paris & Banlieue (max 1h30)', unit:'photo',
+      isFixed:true, fixedQty:70, fixedPrice:2100, pu:30,
+      desc: DESC.photo_paris, days:1 },
+    // 1C — 1j Hors Paris — 2 fixed rows
+    { id:'r1c_50', ref:'1C', name:'1j Hors Paris — 50 photos restaurant', tag:'HP',
+      sub:'Journée complète · Hors Paris (max 2h30)', unit:'photo',
+      isFixed:true, fixedQty:50, fixedPrice:1750, pu:35,
+      desc: DESC.photo_hors, days:1 },
+    { id:'r1c_70', ref:'1C', name:'1j Hors Paris — 70 photos restaurant', tag:'HP',
+      sub:'Journée complète · Hors Paris (max 2h30)', unit:'photo',
+      isFixed:true, fixedQty:70, fixedPrice:2200, pu:31.4,
+      desc: DESC.photo_hors, days:1 },
+  ],
+  packshot: [
+    // 2A — ½j Paris — 2 fixed rows
+    { id:'p2a_10', ref:'2A', name:'½j Paris — 10 packshots', tag:null,
+      sub:'Demi-journée · Paris & Banlieue · droits d\'auteur inclus', unit:'packshot',
+      isFixed:true, fixedQty:10, fixedPrice:900, pu:90,
+      desc: DESC.packshot_paris, days:0.5 },
+    { id:'p2a_20', ref:'2A', name:'½j Paris — 20 packshots', tag:null,
+      sub:'Demi-journée · Paris & Banlieue · droits d\'auteur inclus', unit:'packshot',
+      isFixed:true, fixedQty:20, fixedPrice:1620, pu:81,
+      desc: DESC.packshot_paris, days:0.5 },
+    // 2B — 1j Paris — 3 fixed rows
+    { id:'p2b_30', ref:'2B', name:'1j Paris — 30 packshots', tag:null,
+      sub:'Journée complète · Paris & Banlieue · droits d\'auteur inclus', unit:'packshot',
+      isFixed:true, fixedQty:30, fixedPrice:2050, pu:68.3,
+      desc: DESC.packshot_paris, days:1 },
+    { id:'p2b_40', ref:'2B', name:'1j Paris — 40 packshots', tag:null,
+      sub:'Journée complète · Paris & Banlieue · droits d\'auteur inclus', unit:'packshot',
+      isFixed:true, fixedQty:40, fixedPrice:2160, pu:54,
+      desc: DESC.packshot_paris, days:1 },
+    { id:'p2b_50', ref:'2B', name:'1j Paris — 50 packshots', tag:null,
+      sub:'Journée complète · Paris & Banlieue · droits d\'auteur inclus', unit:'packshot',
+      isFixed:true, fixedQty:50, fixedPrice:2475, pu:49.5,
+      desc: DESC.packshot_paris, days:1 },
+    // 2C — 1j Hors Paris — 5 fixed rows (+20%)
+    { id:'p2c_10', ref:'2C', name:'1j Hors Paris — 10 packshots', tag:'HP',
+      sub:'Journée complète · Hors Paris · +20%', unit:'packshot',
+      isFixed:true, fixedQty:10, fixedPrice:1080, pu:108,
+      desc: DESC.packshot_hors, days:1 },
+    { id:'p2c_20', ref:'2C', name:'1j Hors Paris — 20 packshots', tag:'HP',
+      sub:'Journée complète · Hors Paris · +20%', unit:'packshot',
+      isFixed:true, fixedQty:20, fixedPrice:1944, pu:97.2,
+      desc: DESC.packshot_hors, days:1 },
+    { id:'p2c_30', ref:'2C', name:'1j Hors Paris — 30 packshots', tag:'HP',
+      sub:'Journée complète · Hors Paris · +20%', unit:'packshot',
+      isFixed:true, fixedQty:30, fixedPrice:2460, pu:82,
+      desc: DESC.packshot_hors, days:1 },
+    { id:'p2c_40', ref:'2C', name:'1j Hors Paris — 40 packshots', tag:'HP',
+      sub:'Journée complète · Hors Paris · +20%', unit:'packshot',
+      isFixed:true, fixedQty:40, fixedPrice:2592, pu:64.8,
+      desc: DESC.packshot_hors, days:1 },
+    { id:'p2c_50', ref:'2C', name:'1j Hors Paris — 50 packshots', tag:'HP',
+      sub:'Journée complète · Hors Paris · +20%', unit:'packshot',
+      isFixed:true, fixedQty:50, fixedPrice:2970, pu:59.4,
+      desc: DESC.packshot_hors, days:1 },
+  ],
+  studio: [
+    // 3A — Studio Paris — 2 fixed rows (150€/photo)
+    { id:'s3a_5', ref:'3A', name:'Studio Paris — 5 photos', tag:'STUDIO',
+      sub:'Paris & Banlieue · ½j · droits de diffusion 2 ans', unit:'photo',
+      isFixed:true, fixedQty:5, fixedPrice:750, pu:150,
+      desc: DESC.studio_paris, days:0.5 },
+    { id:'s3a_10', ref:'3A', name:'Studio Paris — 10 photos', tag:'STUDIO',
+      sub:'Paris & Banlieue · 1j · droits de diffusion 2 ans', unit:'photo',
+      isFixed:true, fixedQty:10, fixedPrice:1500, pu:150,
+      desc: DESC.studio_paris, days:1 },
+    // 3B — Studio Hors Paris — 2 fixed rows (180€/photo, +20%)
+    { id:'s3b_5', ref:'3B', name:'Studio Hors Paris — 5 photos', tag:'HP',
+      sub:'Hors Paris · 1j · droits de diffusion 2 ans · +20%', unit:'photo',
+      isFixed:true, fixedQty:5, fixedPrice:900, pu:180,
+      desc: DESC.studio_hors, days:1 },
+    { id:'s3b_10', ref:'3B', name:'Studio Hors Paris — 10 photos', tag:'HP',
+      sub:'Hors Paris · 1j · droits de diffusion 2 ans · +20%', unit:'photo',
+      isFixed:true, fixedQty:10, fixedPrice:1800, pu:180,
+      desc: DESC.studio_hors, days:1 },
+    // 3C — Location Studio Palaiseau
+    { id:'s3c_h', ref:'3C', name:'Location Studio Palaiseau · ½j', tag:'STUDIO',
+      sub:'Sans équipe — Studio Palaiseau', unit:'session',
+      isFixed:true, fixedQty:1, fixedPrice:350, pu:350,
+      desc: DESC.location_studio, days:0.5 },
+    { id:'s3c_f', ref:'3C', name:'Location Studio Palaiseau · 1j', tag:'STUDIO',
+      sub:'Sans équipe — Studio Palaiseau', unit:'session',
+      isFixed:true, fixedQty:1, fixedPrice:600, pu:600,
+      desc: DESC.location_studio, days:1 },
+  ],
+  video: [
+    // 4A/B/C — Paris ½j
+    { id:'v15p', ref:'4A', name:'Vidéo 15s · ½j Paris', tag:'VIDEO',
+      sub:'Demi-journée · Paris & Banlieue · droits diffusion', unit:'vidéo',
+      isFixed:true, fixedQty:1, fixedPrice:400, pu:400,
+      descFn: () => DESC.video_paris('15 secondes'), days:0.5 },
+    { id:'v30p', ref:'4B', name:'Vidéo 30s · ½j Paris', tag:'VIDEO',
+      sub:'Demi-journée · Paris & Banlieue · droits diffusion', unit:'vidéo',
+      isFixed:true, fixedQty:1, fixedPrice:650, pu:650,
+      descFn: () => DESC.video_paris('30 secondes'), days:0.5 },
+    { id:'v60p', ref:'4C', name:'Vidéo 60s · ½j Paris', tag:'VIDEO',
+      sub:'Demi-journée · Paris & Banlieue · droits diffusion', unit:'vidéo',
+      isFixed:true, fixedQty:1, fixedPrice:1200, pu:1200,
+      descFn: () => DESC.video_paris('60 secondes'), days:0.5 },
+    // 4D/E/F — Hors Paris 1j
+    { id:'v15h', ref:'4D', name:'Vidéo 15s · Hors Paris', tag:'HP',
+      sub:'Journée complète · Hors Paris · droits diffusion', unit:'vidéo',
+      isFixed:true, fixedQty:1, fixedPrice:480, pu:480,
+      descFn: () => DESC.video_hors('15 secondes'), days:1 },
+    { id:'v30h', ref:'4E', name:'Vidéo 30s · Hors Paris', tag:'HP',
+      sub:'Journée complète · Hors Paris · droits diffusion', unit:'vidéo',
+      isFixed:true, fixedQty:1, fixedPrice:780, pu:780,
+      descFn: () => DESC.video_hors('30 secondes'), days:1 },
+    { id:'v60h', ref:'4F', name:'Vidéo 60s · Hors Paris', tag:'HP',
+      sub:'Journée complète · Hors Paris · droits diffusion', unit:'vidéo',
+      isFixed:true, fixedQty:1, fixedPrice:1440, pu:1440,
+      descFn: () => DESC.video_hors('60 secondes'), days:1 },
+  ],
+  options: [
+    // Section 5 — Droits & options
+    { id:'da_no', ref:'5', name:'Droits d\'auteur photos · sans impression', tag:null,
+      sub:'+60% sur prix de base photos — sans mention obligatoire', unit:'%',
+      isFixed:false, isPalier:false, price:0, isPercent:true, percent:60,
+      desc: DESC.da_no_print, days:null },
+    { id:'da_pr', ref:'5', name:'Droits d\'auteur photos · avec impression', tag:null,
+      sub:'+80% sur prix de base photos — sans mention obligatoire', unit:'%',
+      isFixed:false, isPalier:false, price:0, isPercent:true, percent:80,
+      desc: DESC.da_with_print, days:null },
+    { id:'da_vid', ref:'5', name:'Droits d\'auteur vidéos', tag:'VIDEO',
+      sub:'+50% sur prix de base vidéo', unit:'%',
+      isFixed:false, isPalier:false, price:0, isPercent:true, percent:50,
+      desc: DESC.da_video, days:null },
+    { id:'ret', ref:'5', name:'Retouche impression (+15%/photo)', tag:null,
+      sub:'Retouche ultra-détaillée · PLV, packaging, affichage', unit:'%',
+      isFixed:false, isPalier:false, price:0, isPercent:true, percent:15,
+      desc: DESC.retouche_imp, days:null },
+    // Section 6 — Extensions droits
+    { id:'ext1', ref:'6', name:'Extension droits +1 an (total 3 ans)', tag:null,
+      sub:'+5% sur prix de base', unit:'%',
+      isFixed:false, isPalier:false, price:0, isPercent:true, percent:5,
+      desc: DESC.ext_1an, days:null },
+    { id:'ext3', ref:'6', name:'Extension droits +3 ans (total 5 ans)', tag:null,
+      sub:'+10% sur prix de base', unit:'%',
+      isFixed:false, isPalier:false, price:0, isPercent:true, percent:10,
+      desc: DESC.ext_3ans, days:null },
+    { id:'ext8', ref:'6', name:'Extension droits +8 ans (total 10 ans)', tag:null,
+      sub:'+20% sur prix de base', unit:'%',
+      isFixed:false, isPalier:false, price:0, isPercent:true, percent:20,
+      desc: DESC.ext_8ans, days:null },
+  ],
+  forfait: [
+    // Section 7 — Forfaits combinés
+    { id:'f7a', ref:'7A', name:'Forfait 7A — Essentiel ½j Paris', tag:'FORFAIT',
+      sub:'20 photos + 1 vidéo 30s · ~10% économie', unit:'forfait',
+      isFixed:true, fixedQty:1, fixedPrice:1390, pu:1390,
+      desc: DESC.forfait_7a, days:0.5 },
+    { id:'f7b', ref:'7B', name:'Forfait 7B — Standard 1j Paris', tag:'FORFAIT',
+      sub:'50 photos + 3 vidéos 15s · ~10% économie', unit:'forfait',
+      isFixed:true, fixedQty:1, fixedPrice:2565, pu:2565,
+      desc: DESC.forfait_7b, days:1 },
+    { id:'f7c', ref:'7C', name:'Forfait 7C — Premium 2j Paris', tag:'FORFAIT',
+      sub:'100 photos + 2×30s + 2×15s vidéos · ~12% économie', unit:'forfait',
+      isFixed:true, fixedQty:1, fixedPrice:5810, pu:5810,
+      desc: DESC.forfait_7c, days:2 },
+    { id:'bk1', ref:'—', name:'Book photo — journée', tag:null,
+      sub:'Max. 10 photos/jour — stylisme exclu', unit:'jour',
+      isFixed:true, fixedQty:1, fixedPrice:2000, pu:2000,
+      desc: DESC.book_day, days:1 },
+    { id:'bk5', ref:'—', name:'Book photo — 5 jours', tag:null,
+      sub:'Stylisme exclu — sur devis', unit:'forfait',
+      isFixed:true, fixedQty:1, fixedPrice:10000, pu:10000,
+      desc: DESC.book_5j, days:5 },
+  ],
+};
+
+// Helper to get description for a service+qty
+function getDesc(s, qty) {
+  if (s.descFn) return s.descFn();
+  if (s.desc) return s.desc(qty);
+  return '';
+}
+
+// ==========================================================
+// STATE — session-based, days set manually
+// ==========================================================
+// sessions = [ { id, days: 0.5|1|1.5|2|..., label: '', lines: [] }, ... ]
+// Minimum per session = days × 500 (each ½-day = 500€ floor)
+// Lines are just itemized visuals — no day inference
+
+let sessions = [{ id: 1, days: 0.5, min: 500, label: '', lines: [] }];
+let sid = 1;
+let lid = 0;
+
+function fmtPlain(n) {
+  const hasDecimals = n % 1 !== 0;
+  return n.toLocaleString('fr-FR', { minimumFractionDigits: hasDecimals ? 2 : 0, maximumFractionDigits: 2 }) + ' €';
+}
+function fmt(n) { return fmtPlain(n); }
+
+function linePrice(s, qty) {
+  if (s.isPercent) return 0;
+  // Always use unit price × quantity
+  const unitP = s.pu || s.fixedPrice || s.price || 0;
+  return unitP * qty;
+}
+
+function lineUnitPrice(s, qty) {
+  if (s.isPercent) return null;
+  return s.pu || s.fixedPrice || s.price || 0;
+}
+
+function sessMin(sess) { return sess.min; }
+function daysLabel(d) {
+  if (d === 0.5) return '½ journée';
+  if (d === 1)   return '1 journée';
+  const full = Math.floor(d);
+  const half = d % 1 !== 0;
+  return half ? `${full}j + ½j` : `${full} journées`;
+}
+// Default minimums by days: 0.5→500, 1→1200, 1.5→1700, 2→2400…
+function defaultMin(days) {
+  if (days === 0.5) return 500;
+  if (days === 1)   return 1200;
+  // For multi-day: 1200 per full day, 500 per half-day
+  const full = Math.floor(days);
+  const half = days % 1 !== 0 ? 1 : 0;
+  return full * 1200 + half * 500;
+}
+
+// ==========================================================
+// SIDEBAR
+// ==========================================================
+// ==========================================================
+function onCatChange() {
+  const cat = document.getElementById('catSelect').value;
+  const list = document.getElementById('serviceList');
+  list.innerHTML = '';
+  if (!cat) return;
+  const svcs = SERVICES[cat] || [];
+
+  let lastRef = null;
+  svcs.forEach(s => {
+    if (s.ref && s.ref !== lastRef) {
+      lastRef = s.ref;
+      const grpDiv = document.createElement('div');
+      grpDiv.className = 'sc-ref-group';
+      grpDiv.textContent = `Section ${s.ref}`;
+      list.appendChild(grpDiv);
+    }
+
+    const tc = s.tag==='HP'?'tag-hp':s.tag==='STUDIO'?'tag-studio':s.tag==='VIDEO'?'tag-video':s.tag==='FORFAIT'?'tag-forfait':'';
+    const tagHTML = s.tag ? `<span class="tag ${tc}">${s.tag}</span>` : '';
+    const refBadge = s.ref && s.ref !== '—' ? `<span class="ref-badge">${s.ref}</span>` : '';
+
+    let pval, punit;
+    if (s.isPercent) {
+      pval = `+${s.percent}%`; punit = 'sur base';
+    } else {
+      pval = `${(s.fixedPrice || s.pu || 0).toLocaleString('fr-FR')} €`;
+      punit = s.isFixed && s.fixedQty > 1 ? `${s.fixedQty} ${s.unit}s` : `/ ${s.unit}`;
+    }
+
+    const card = document.createElement('div');
+    card.className = 'service-card';
+    card.innerHTML = `<div class="sc-inner">
+      <div class="sc-body">
+        <div class="sc-name">${refBadge}${s.name}${tagHTML}</div>
+        <div class="sc-sub">${s.sub}</div>
+      </div>
+      <div class="sc-price-col">
+        <div class="sc-pval">${pval}</div>
+        <div class="sc-punit">${punit}</div>
+      </div>
+      <button class="sc-addbtn" onclick="event.stopPropagation();addLine(SERVICES_FLAT['${s.id}'])">+</button>
+    </div>`;
+    card.addEventListener('click', () => addLine(s));
+    list.appendChild(card);
+  });
+}
+
+// Flat lookup map for sidebar button callbacks
+const SERVICES_FLAT = {};
+Object.values(SERVICES).flat().forEach(s => SERVICES_FLAT[s.id] = s);
+
+// ==========================================================
+// ADD LINE / SESSION MANAGEMENT
+// ==========================================================
+function addLine(s, qty) {
+  const sess = sessions[sessions.length - 1];
+  // Auto-set session days from service if session is still at default (0.5) and has no lines yet
+  if (sess.lines.length === 0 && s.days && s.days !== sess.days) {
+    sess.days = s.days;
+    sess.min = defaultMin(s.days);
+  }
+  const q = qty || s.fixedQty || 1;
+  sess.lines.push({ id: ++lid, s, qty: q, note: '' });
+  renderQuote();
+  // On mobile: switch to devis tab after adding
+  if (window.innerWidth <= 700) mobSwitch('devis');
+  setTimeout(() => { const ms = document.getElementById('mainScroll'); ms.scrollTop = ms.scrollHeight; }, 60);
+}
+
+function addLineQty(evt, sid_param, qty) {
+  evt.stopPropagation();
+  const s = SERVICES_FLAT[sid_param];
+  if (s) addLine(s, qty);
+}
+
+function addSession() {
+  sessions.push({ id: ++sid, days: 0.5, min: 500, label: '', lines: [] });
+  renderQuote();
+  setTimeout(() => { const ms = document.getElementById('mainScroll'); ms.scrollTop = ms.scrollHeight; }, 60);
+}
+
+function removeSession(sessId) {
+  if (sessions.length === 1) { sessions[0].lines = []; sessions[0].days = 0.5; sessions[0].label = ''; renderQuote(); return; }
+  sessions = sessions.filter(s => s.id !== sessId);
+  renderQuote();
+}
+
+function changeDays(sessId, delta) {
+  const sess = sessions.find(s => s.id === sessId);
+  if (!sess) return;
+  const next = Math.round((sess.days + delta) * 2) / 2;
+  if (next >= 0.5) {
+    sess.days = next;
+    sess.min = defaultMin(next); // auto-update minimum
+    renderQuote();
+  }
+}
+
+function setSessLabel(sessId, val) {
+  const sess = sessions.find(s => s.id === sessId);
+  if (sess) sess.label = val;
+}
+
+// Get all lines flat
+function allLines() { return sessions.flatMap(s => s.lines); }
+
+// ==========================================================
+// RENDER QUOTE
+// ==========================================================
+const catLabels = {
+  restaurant:'📷 Shooting Restaurant', packshot:'📦 Packshots',
+  studio:'🏛 Photos Studio', video:'🎬 Vidéos Culinaires',
+  options:'⚙️ Options & Droits', forfait:'✦ Forfaits & Books',
+};
+function getCat(s) {
+  return Object.keys(SERVICES).find(c => SERVICES[c].find(x => x.id===s.id)) || '';
+}
+
+function renderQuote() {
+  const area = document.getElementById('quoteArea');
+  const footer = document.getElementById('footer');
+
+  const allL = allLines();
+  const hasContent = allL.length > 0 || sessions.length > 1;
+  if (!hasContent && sessions[0].lines.length === 0) {
+    area.innerHTML = `<div class="empty-state"><div class="empty-icon">◈</div><p>Sélectionnez une catégorie dans le menu à gauche<br>pour ajouter des prestations au devis.</p></div>`;
+    footer.classList.add('hidden'); return;
+  }
+  footer.classList.remove('hidden');
+
+  let html = '';
+  let grandTotal = 0;
+
+  sessions.forEach((sess, sessIdx) => {
+    const min = sessMin(sess);
+    const sessRaw = sess.lines.reduce((a, l) => a + linePrice(l.s, l.qty), 0);
+    const complement = Math.max(0, min - sessRaw);
+    const sessTotal = sessRaw + complement;
+    grandTotal += sessTotal;
+
+    const dlabel = daysLabel(sess.days);
+    const sessTitle = sess.label ? `${sess.label}` : (sessions.length > 1 ? `Session ${sessIdx + 1}` : 'Devis');
+
+    // Session header — black bar with day counter
+    html += `<div class="sess-header">
+      <div class="sess-title-area">
+        <input class="sess-name-input" type="text" value="${esc(sess.label)}"
+          placeholder="Nom de la session (optionnel)"
+          oninput="setSessLabel(${sess.id},this.value)">
+        <div class="sess-day-block">
+          <button class="day-btn" onclick="changeDays(${sess.id},-0.5)">−</button>
+          <div class="day-display">
+            <span class="day-count">${dlabel}</span>
+            <span class="day-min">min. ${fmt(min)}</span>
+          </div>
+          <button class="day-btn" onclick="changeDays(${sess.id},+0.5)">+</button>
+        </div>
+      </div>
+      <div class="sess-actions">
+        ${sessions.length > 1 ? `<button class="sess-del-btn" onclick="removeSession(${sess.id})" title="Supprimer cette session">✕</button>` : ''}
+      </div>
+    </div>`;
+
+    // Lines table
+    if (sess.lines.length === 0) {
+      html += `<div class="sess-empty">Session vide — ajoutez des prestations depuis le catalogue.</div>`;
+    } else {
+      html += `<table class="quote-table">
+        <thead><tr>
+          <th style="width:34%">Prestation & description</th>
+          <th style="width:11%">Quantité</th>
+          <th class="r" style="width:14%">Prix unitaire HT</th>
+          <th class="r" style="width:11%">Total HT</th>
+          <th style="width:20%">Note</th>
+          <th style="width:10%"></th>
+        </tr></thead><tbody>`;
+
+      let alt = false;
+      sess.lines.forEach(line => {
+        const s = line.s; const qty = line.qty;
+        const pu = lineUnitPrice(s, qty);
+        const total = linePrice(s, qty);
+        const descText = getDesc(s, qty);
+        const puDisplay = s.isPercent ? `+${s.percent}%` : fmt(pu);
+        const totalDisplay = s.isPercent
+          ? `<span style="font-size:0.52rem;color:var(--muted)">mémo +${s.percent}%</span>`
+          : `<b>${fmt(total)}</b>`;
+        const qtyLabelText = s.isFixed ? `${s.pu} € / ${s.unit}` : (s.isPalier ? `${pu} € / ${s.unit}` : s.unit);
+        const refBadge = s.ref && s.ref !== '—' ? `<span class="ref-badge" style="margin-right:5px">${s.ref}</span>` : '';
+
+        html += `<tr class="tr-data${alt ? ' alt' : ''}" data-lid="${line.id}">
+          <td>
+            <div class="desc-name">${refBadge}${s.name}</div>
+            <div class="desc-full">${esc(descText)}</div>
+            <div class="copy-row">
+              <button class="cbtn" onclick="cpF(${line.id},'desc')">desc</button>
+              <button class="cbtn" onclick="cpF(${line.id},'qty')">qté</button>
+              <button class="cbtn" onclick="cpF(${line.id},'pu')">px unit.</button>
+              <button class="cbtn" onclick="cpF(${line.id},'total')">total</button>
+              <button class="cbtn" onclick="cpF(${line.id},'full')">tout</button>
+            </div>
+          </td>
+          <td>
+            <div class="qty-wrap">
+              <button class="qbtn" onclick="chgQ(${line.id},-1)">−</button>
+              <input class="qinput" type="number" min="1" value="${qty}" onchange="setQ(${line.id},this.value)" onblur="setQ(${line.id},this.value)">
+              <button class="qbtn" onclick="chgQ(${line.id},+1)">+</button>
+            </div>
+            <div class="qty-label">${qtyLabelText}</div>
+          </td>
+          <td class="price-cell">${puDisplay}</td>
+          <td class="total-cell">${totalDisplay}</td>
+          <td><textarea class="note-ta" rows="2" placeholder="note…" oninput="setN(${line.id},this.value)">${esc(line.note)}</textarea></td>
+          <td style="text-align:center;vertical-align:middle">
+            <button class="del-btn" onclick="delL(${line.id})">✕</button>
+          </td>
+        </tr>`;
+        alt = !alt;
+      });
+
+      // Complement row
+      if (complement > 0) {
+        html += `<tr class="tr-data tr-complement">
+          <td>
+            <div class="desc-name" style="color:var(--gold)">Complément minimum session</div>
+            <div class="desc-full">${dlabel} · minimum ${fmt(min)}. Sous-total lignes : ${fmt(sessRaw)}. Complément : ${fmt(complement)}.</div>
+          </td>
+          <td>—</td><td class="price-cell">—</td>
+          <td class="total-cell"><b style="color:var(--gold)">${fmt(complement)}</b></td>
+          <td></td><td></td>
+        </tr>`;
+      }
+
+      // Session subtotal
+      html += `<tr class="tr-sess-total">
+        <td colspan="2"><span class="sess-total-label">Sous-total session${sessions.length > 1 ? ' ' + (sessIdx+1) : ''}</span></td>
+        <td colspan="2" style="text-align:right"><b>${fmt(sessTotal)}</b></td>
+        <td></td>
+        <td style="text-align:center;vertical-align:middle">
+          <button class="cbtn" onclick="cpT('${fmtPlain(sessTotal)}')" style="font-size:0.49rem;padding:2px 7px;border-color:#ccc;color:#aaa">copier</button>
+        </td>
+      </tr></tbody></table>`;
+    }
+
+    html += `<div class="sess-gap"></div>`;
+  });
+
+  // Add session button
+  html += `<div class="add-session-row">
+    <button class="add-sess-btn" onclick="addSession()">+ Ajouter une session</button>
+  </div>`;
+
+  // Grand total
+  if (sessions.some(s => s.lines.length > 0)) {
+    html += `<div class="grand-total-row">
+      <span class="gt-label">Total HT</span>
+      <span class="gt-val">${fmt(grandTotal)}</span>
+      <button class="cbtn" onclick="cpT('${fmtPlain(grandTotal)}')" style="font-size:0.52rem;padding:3px 9px;border-color:#888;color:#aaa;margin-left:12px">copier</button>
+    </div>`;
+  }
+
+  area.innerHTML = html;
+
+  const tva = grandTotal * 0.2;
+  document.getElementById('fLines').textContent = allL.length;
+  document.getElementById('fHT').textContent = fmt(grandTotal);
+  document.getElementById('fTVA').textContent = fmt(tva);
+  document.getElementById('fTTC').textContent = fmt(grandTotal + tva);
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ==========================================================
+// MUTATIONS
+// ==========================================================
+function findLine(id) {
+  for (const sess of sessions) {
+    const l = sess.lines.find(x => x.id === id);
+    if (l) return l;
+  }
+  return null;
+}
+
+function chgQ(id, d) {
+  const l = findLine(id); if (!l) return;
+  l.qty = Math.max(1, l.qty + d); renderQuote();
+}
+function setQ(id, v) {
+  const l = findLine(id); if (!l) return;
+  const n = parseInt(v); if (n > 0) { l.qty = n; renderQuote(); }
+}
+function setN(id, v) {
+  const l = findLine(id); if (l) l.note = v;
+}
+function delL(id) {
+  sessions.forEach(sess => { sess.lines = sess.lines.filter(x => x.id !== id); });
+  // Remove empty non-first sessions (keep at least one)
+  if (sessions.length > 1) sessions = sessions.filter((s, i) => i === 0 || s.lines.length > 0);
+  renderQuote();
+}
+function clearAll() {
+  if (!allLines().length) return;
+  if (confirm('Effacer toutes les lignes du devis ?')) {
+    sessions = [{ id: ++sid, type: null, lines: [] }];
+    renderQuote();
+  }
+}
+
+// ==========================================================
+// COPY
+// ==========================================================
+function cpT(t) {
+  navigator.clipboard.writeText(t).catch(() => {
+    const el = document.createElement('textarea');
+    el.value = t; document.body.appendChild(el); el.select();
+    document.execCommand('copy'); document.body.removeChild(el);
+  });
+}
+function flash(id, field) {
+  const tr = document.querySelector(`tr[data-lid="${id}"]`);
+  if (!tr) return;
+  const btns = tr.querySelectorAll('.cbtn');
+  const map = { desc:0, qty:1, pu:2, total:3, full:4 };
+  const b = btns[map[field]];
+  if (!b) return;
+  const o = b.textContent; b.textContent = '✓'; b.classList.add('ok');
+  setTimeout(() => { b.textContent = o; b.classList.remove('ok'); }, 1400);
+}
+function cpF(id, field) {
+  const l = findLine(id); if (!l) return;
+  const s = l.s; const qty = l.qty;
+  const pu = lineUnitPrice(s, qty); const total = linePrice(s, qty);
+  const descText = getDesc(s, qty);
+  let t = '';
+  if (field === 'desc') t = descText;
+  else if (field === 'qty') t = String(qty);
+  else if (field === 'pu') t = s.isPercent ? `+${s.percent}%` : `${fmtPlain(pu)}`;
+  else if (field === 'total') t = s.isPercent ? `+${s.percent}% (mémo)` : fmtPlain(total);
+  else if (field === 'full') {
+    const puStr = s.isPercent ? `+${s.percent}%` : fmtPlain(pu);
+    const totStr = s.isPercent ? `+${s.percent}% sur base` : fmtPlain(total);
+    t = `${s.name}\n${descText}\nQuantité : ${qty} ${s.unit}${qty > 1 && !s.isPercent ? 's' : ''}\nPrix unitaire HT : ${puStr}\nTotal HT : ${totStr}${l.note ? '\nNote : ' + l.note : ''}`;
+  }
+  cpT(t); flash(id, field);
+}
+function copyAll() {
+  const all = allLines(); if (!all.length) return;
+  let txt = '';
+  let grandTotal = 0;
+  sessions.forEach((sess, si) => {
+    if (!sess.lines.length) return;
+    const min = sessMin(sess);
+    const sessRaw = sess.lines.reduce((a, l) => a + linePrice(l.s, l.qty), 0);
+    const complement = Math.max(0, min - sessRaw);
+    const sessTotal = sessRaw + complement;
+    grandTotal += sessTotal;
+    const title = sess.label || (sessions.length > 1 ? `Session ${si + 1}` : 'Devis');
+    txt += `\n═══ ${title} · ${daysLabel(sess.days)} · min. ${fmtPlain(min)} ═══\n`;
+    sess.lines.forEach(l => {
+      const s = l.s; const qty = l.qty;
+      const pu = lineUnitPrice(s, qty); const total = linePrice(s, qty);
+      const puStr = s.isPercent ? `+${s.percent}%` : fmtPlain(pu);
+      const totStr = s.isPercent ? `+${s.percent}% (mémo)` : fmtPlain(total);
+      txt += `— ${s.name}\n  ${getDesc(s, qty).replace(/\n/g, '\n  ')}\n  Quantité : ${qty} ${s.unit} | Prix unit. HT : ${puStr} | Total HT : ${totStr}${l.note ? '\n  Note : ' + l.note : ''}\n`;
+    });
+    if (complement > 0) txt += `— Complément minimum : ${fmtPlain(complement)}\n`;
+    txt += `  → Sous-total : ${fmtPlain(sessTotal)}\n`;
+  });
+  txt += `\n${'─'.repeat(40)}\nTOTAL HT  : ${fmtPlain(grandTotal)}\nTVA 20%   : ${fmtPlain(grandTotal * 0.2)}\nTOTAL TTC : ${fmtPlain(grandTotal * 1.2)}`;
+  cpT(txt.trim());
+  const b = event.target; const o = b.textContent; b.textContent = '✓ Copié !';
+  setTimeout(() => b.textContent = o, 2000);
+}
+
+renderQuote();
+
+// ==========================================================
+// COPY
+// ==========================================================
+function cpT(t) {
+  navigator.clipboard.writeText(t).catch(()=>{
+    const el=document.createElement('textarea');
+    el.value=t;document.body.appendChild(el);el.select();
+    document.execCommand('copy');document.body.removeChild(el);
+  });
+}
+function flash(id, field) {
+  const tr = document.querySelector(`tr[data-lid="${id}"]`);
+  if (!tr) return;
+  const btns = tr.querySelectorAll('.cbtn');
+  const map = {desc:0,qty:1,pu:2,total:3,full:4};
+  const b = btns[map[field]];
+  if (!b) return;
+  const o=b.textContent; b.textContent='✓'; b.classList.add('ok');
+  setTimeout(()=>{b.textContent=o;b.classList.remove('ok');},1400);
+}
+function cpF(id, field) {
+  const l=lines.find(x=>x.id===id); if(!l)return;
+  const s=l.s; const qty=l.qty;
+  const pu=lineUnitPrice(s,qty); const total=linePrice(s,qty);
+  const descText=getDesc(s,qty);
+  let t='';
+  if(field==='desc') t=descText;
+  else if(field==='qty') t=String(qty);
+  else if(field==='pu') t=s.isPercent?`+${s.percent}%`:`${pu.toFixed(2).replace('.',',')} €`;
+  else if(field==='total') t=s.isPercent?`+${s.percent}% (mémo)`:total>0?`${total.toFixed(2).replace('.',',')} €`:'0 €';
+  else if(field==='full') {
+    const puStr=s.isPercent?`+${s.percent}%`:`${pu.toFixed(2).replace('.',',')} €`;
+    const totStr=s.isPercent?`+${s.percent}% sur base`:`${total.toFixed(2).replace('.',',')} €`;
+    t=`${s.name}\n${descText}\nQuantité : ${qty} ${s.unit}${qty>1&&!s.isPercent?'s':''}\nPrix unitaire HT : ${puStr}\nTotal HT : ${totStr}${l.note?'\nNote : '+l.note:''}`;
+  }
+  cpT(t); flash(id,field);
+}
+function copyAll() {
+  if(!lines.length)return;
+  const rows = lines.map(l=>{
+    const s=l.s; const qty=l.qty;
+    const pu=lineUnitPrice(s,qty); const total=linePrice(s,qty);
+    const descText=getDesc(s,qty);
+    const puStr=s.isPercent?`+${s.percent}%`:`${pu.toFixed(2).replace('.',',')} €`;
+    const totStr=s.isPercent?`+${s.percent}% (mémo)`:`${total.toFixed(2).replace('.',',')} €`;
+    return `— ${s.name}\n  ${descText.replace(/\n/g,'\n  ')}\n  Quantité : ${qty} ${s.unit}${qty>1&&!s.isPercent?'s':''} | Prix unitaire HT : ${puStr} | Total HT : ${totStr}${l.note?'\n  Note : '+l.note:''}`;
+  });
+  const sub=lines.reduce((a,l)=>a+linePrice(l.s,l.qty),0);
+  const txt=rows.join('\n\n')+`\n\n${'─'.repeat(40)}\nTOTAL HT  : ${sub.toFixed(2).replace('.',',')} €\nTVA 20%   : ${(sub*.2).toFixed(2).replace('.',',')} €\nTOTAL TTC : ${(sub*1.2).toFixed(2).replace('.',',')} €`;
+  cpT(txt);
+  const b=event.target; const o=b.textContent; b.textContent='✓ Copié !';
+  setTimeout(()=>b.textContent=o,2000);
+}
+
+// Mobile tab switching
+function mobSwitch(panel) {
+  const catalogue = document.getElementById('panelCatalogue');
+  const devis = document.getElementById('panelDevis');
+  const tabC = document.getElementById('tabCatalogue');
+  const tabD = document.getElementById('tabDevis');
+  if (panel === 'catalogue') {
+    catalogue.classList.add('mob-visible');
+    devis.classList.remove('mob-visible');
+    tabC.classList.add('active');
+    tabD.classList.remove('active');
+  } else {
+    devis.classList.add('mob-visible');
+    catalogue.classList.remove('mob-visible');
+    tabD.classList.add('active');
+    tabC.classList.remove('active');
+  }
+}
+
+// On desktop, always show both panels
+function ensureDesktopPanels() {
+  if (window.innerWidth > 700) {
+    document.getElementById('panelCatalogue').classList.add('mob-visible');
+    document.getElementById('panelDevis').classList.add('mob-visible');
+  }
+}
+window.addEventListener('resize', ensureDesktopPanels);
+ensureDesktopPanels();
+
+renderQuote();
+</script>
+</body>
+</html>
