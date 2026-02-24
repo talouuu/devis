@@ -785,6 +785,19 @@ const SERVICES = {
       sub:'Journée complète · Hors Paris · droits diffusion', unit:'vidéo',
       isFixed:true, fixedQty:1, fixedPrice:1440, pu:1440,
       descFn: () => DESC.video_hors('60 secondes'), days:1 },
+    // 4G — Nouveaux formats
+    { id:'v120p', ref:'4G', name:'Vidéo 1:30–2min · Paris', tag:'VIDEO',
+      sub:'Demi-journée/journée · Paris & Banlieue · droits diffusion', unit:'vidéo',
+      isFixed:true, fixedQty:1, fixedPrice:1800, pu:1800,
+      descFn: () => DESC.video_paris('1 minute 30 – 2 minutes'), days:1 },
+    { id:'vcapsule', ref:'4G', name:'Capsule vidéo sans montage · 3s', tag:'VIDEO',
+      sub:'1 prise de vue · pas de montage · Paris', unit:'vidéo',
+      isFixed:true, fixedQty:1, fixedPrice:150, pu:150,
+      descFn: () => `1 capsule vidéo · 3 secondes · 1 prise de vue sans montage.\nLivraison du fichier brut en HD. Idéal pour réseaux sociaux (stories, reels courts).\nCession de droits de diffusion pour 2 ans en France, utilisation digitale.`, days:0.5 },
+    { id:'vdecline', ref:'4G', name:'Vidéo déclinée 15s (issue d\'une vidéo plus longue)', tag:'VIDEO',
+      sub:'Montage d\'un format court depuis une vidéo déjà réalisée', unit:'vidéo',
+      isFixed:true, fixedQty:1, fixedPrice:200, pu:200,
+      descFn: () => `1 vidéo déclinée jusqu'à 15 secondes, issue d'une vidéo plus longue réalisée dans la même session.\nMontage, étalonnage et adaptation du format. Livraison en HD sous 15 jours ouvrés.\nCession de droits de diffusion pour 2 ans en France, utilisation digitale.`, days:null },
   ],
   options: [
     // Section 5 — Droits & options
