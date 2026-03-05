@@ -580,6 +580,10 @@ const DESC = {
   ext_3ans: () => `Extension des droits de diffusion : +3 ans (durée totale portée à 5 ans). Supplément +10% sur le prix de base.`,
   ext_8ans: () => `Extension des droits de diffusion : +8 ans (durée totale portée à 10 ans). Supplément +20% sur le prix de base.`,
 
+  express_lo: () => `Livraison express — photos à prix unitaire ≤ 50 €/photo.\nSupplement +50% appliqué sur le prix de base de la prestation photo.\nLivraison accélérée des photos retouchées, délai réduit vs. les 10 jours ouvrés standard.`,
+
+  express_hi: () => `Livraison express — photos à prix unitaire > 50 €/photo.\nSupplement +30% appliqué sur le prix de base de la prestation photo.\nLivraison accélérée des photos retouchées, délai réduit vs. les 10 jours ouvrés standard.`,
+
   forfait_7a: () => `Forfait Essentiel 7A — ½ journée Paris.\nComprend : 20 photos (prise de vue, retouche, 2 retours, envoi HD sous 10 jours) + 1 vidéo 30s (montage, étalonnage, 2 retours, envoi HD sous 15 jours).\nCession de droits de diffusion 2 ans incluse. Stylisme exclu. Économie ~10% vs prestations séparées.`,
 
   forfait_7b: () => `Forfait Standard 7B — journée complète Paris.\nComprend : 50 photos (prise de vue, retouche, 2 retours, envoi HD sous 10 jours) + 3 vidéos 15s (montage, étalonnage, 2 retours, envoi HD sous 15 jours).\nCession de droits de diffusion 2 ans incluse. Stylisme exclu. Économie ~10% vs prestations séparées.`,
@@ -818,18 +822,27 @@ const SERVICES = {
       isFixed:false, isPalier:false, price:0, isPercent:true, percent:15,
       desc: DESC.retouche_imp, days:null },
     // Section 6 — Extensions droits
-    { id:'ext1', ref:'6', name:'Extension droits +1 an (total 3 ans)', tag:null,
+    { id:'ext1', ref:'6B', name:'Extension droits +1 an (total 3 ans)', tag:null,
       sub:'+5% sur prix de base', unit:'%',
       isFixed:false, isPalier:false, price:0, isPercent:true, percent:5,
       desc: DESC.ext_1an, days:null },
-    { id:'ext3', ref:'6', name:'Extension droits +3 ans (total 5 ans)', tag:null,
+    { id:'ext3', ref:'6B', name:'Extension droits +3 ans (total 5 ans)', tag:null,
       sub:'+10% sur prix de base', unit:'%',
       isFixed:false, isPalier:false, price:0, isPercent:true, percent:10,
       desc: DESC.ext_3ans, days:null },
-    { id:'ext8', ref:'6', name:'Extension droits +8 ans (total 10 ans)', tag:null,
+    { id:'ext8', ref:'6B', name:'Extension droits +8 ans (total 10 ans)', tag:null,
       sub:'+20% sur prix de base', unit:'%',
       isFixed:false, isPalier:false, price:0, isPercent:true, percent:20,
       desc: DESC.ext_8ans, days:null },
+    // Section 6D — Livraison express
+    { id:'express_lo', ref:'6D', name:'Livraison express · photos ≤ 50 €/photo', tag:null,
+      sub:'+50% sur prix de base · prix unitaire ≤ 50 €/photo', unit:'%',
+      isFixed:false, isPalier:false, price:0, isPercent:true, percent:50,
+      desc: DESC.express_lo, days:null },
+    { id:'express_hi', ref:'6D', name:'Livraison express · photos > 50 €/photo', tag:null,
+      sub:'+30% sur prix de base · prix unitaire > 50 €/photo', unit:'%',
+      isFixed:false, isPalier:false, price:0, isPercent:true, percent:30,
+      desc: DESC.express_hi, days:null },
   ],
   forfait: [
     // Section 7 — Forfaits combinés
